@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="BabyRythm, simple logging of baby activities">
+<meta name="author" content="babyrhythm">
+<title>BabyRythm</title>
+<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+<link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen" />
+<link href="/static/css/humanejs-jackedup.css" rel="stylesheet"/>
+<link
+    href='http://fonts.googleapis.com/css?family=Istok+Web|Comfortaa|Didact+Gothic:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic &subset=latin,cyrillic-ext,cyrillic,latin-ext'
+    rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="/static/css/babyrhythm.css" />
+<link rel="stylesheet" href="/static/css/toastr.css" />
+<title>BabyRythm</title>
+<script>
+    var name = "Babyname";
+</script>
+<script type="text/javascript" src="/static/js/humane.js"></script>
+<script type="text/javascript" src="/static/js/chartview.js"></script>
+<script type="text/javascript" src="/static/js/listview.js"></script>
+<script type="text/javascript" src="/static/js/xhr.js"></script>
+<script type="text/javascript" src="/static/js/actionStore.js"></script>
+<script type="text/javascript" src="/static/js/ui.js"></script>
+<script type="text/javascript" src="/static/js/localActionsMirror.js"></script>
+<script type="text/javascript" src="/static/js/babyrhythm.js"></script>
+</head>
+<body onload="init()">
+    <div id="in-nav">
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <ul class="pull-right">
+                        <li><span id="networkstatus">online</span></li>
+              <!-- li><a href="#">Link2</a></li>
+              <li><a href="#">Link3</a></li-->
+              <li><a id="reset">Reset</a></li>
+                    </ul>
+                    <a id="logo" href="#">
+                        <h4>
+                            Baby<strong>Rhythm</strong>
+                        </h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="in-sub-nav">
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <ul>
+                        <li><a href="#" id="eat" class="babyAction"><i class="batch eat"></i><br>Eat</a></li>
+                        <!--<li><span class="label label-important pull-right">08</span><a href="#"><i class="batch sleep"></i><br>Спимо</a></li>-->
+                        <li><a href="#" id="sleep" class="babyAction"><i class="batch sleep"></i><br>Sleep</a></li>
+                        <li><a href="#" id="change" class="babyAction"><i class="batch change"></i><br>Change</a></li>
+                        <li><a href="#" id="fussy" class="babyAction"><i class="batch fussy"></i><br>Fussy</a></li>
+                        <li><a href="#" id="awake" class="babyAction"><i class="batch awake"></i><br>Awake</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page">
+        <div class="page-container">
+            <div class="container">
+                <div class="row">
+                    <div class="span12">
+                        <div style="width: 420px; margin: 0 auto;" id="manualForm">
+                            <select width="100px" style="width: 100px; float: left; margin-right: 20px;"
+                                id="manualAction">
+                                <option value="">Action...</option>
+                                <option value="eat">Eat</option>
+                                <option value="sleep">Sleep</option>
+                                <option value="change">Change</option>
+                                <option value="fussy">Fussy</option>
+                                <option value="awake">Awake</option>
+                            </select> <input size="16" type="datetime" class="form_datetime" id="activityTime" />
+                            <button type="submit" class="btn btn-primary" id="addAction" style="margin-bottom: 10px">Add</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tabbable tabs-top">
+                    <ul class="nav nav-tabs">
+                        <li class="active viewTab" id="chartView"><a data-toggle="tab">Chart</a></li>
+                        <li class="viewTab" id="listView"><a data-toggle="tab">List</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="canvasesPane">
+                            <div style="width: 720px; margin: 0 auto;" id="canvases"></div>
+                        </div>
+                        <div class="tab-pane" id="listPane">
+                            <div class="row">
+                                <div class="span12">
+                                    <ul id="lists" style="width: 720px; margin: 0 auto;"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="span12">BabyRhythm &#169;</div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

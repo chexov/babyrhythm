@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="BabyRhythm, simple logging of baby activities">
+<meta name="author" content="babyrhythm">
+<title>BabyRhythm</title>
+<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+<link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen" />
+<link
+    href='http://fonts.googleapis.com/css?family=Istok+Web|Comfortaa|Didact+Gothic:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic &subset=latin,cyrillic-ext,cyrillic,latin-ext'
+    rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="/static/css/babyrhythm.css" />
+<link rel="stylesheet" href="/static/css/toastr.css" />
+<title>Test</title>
+<script type="text/javascript" src="/static/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="/static/js/toastr.js"></script>
+<script type="text/javascript" src="/static/js/chartview.js"></script>
+<script type="text/javascript" src="/static/js/listview.js"></script>
+<script type="text/javascript" src="/static/js/xhr.js"></script>
+<script type="text/javascript" src="/static/js/actionStore.js"></script>
+<script type="text/javascript" src="/static/js/ui.js"></script>
+<script type="text/javascript" src="/static/js/localActionsMirror.js"></script>
+<script type="text/javascript">
+var name = 'Test';
+function initTest(){
+    var ui = new UI(name);
+
+    /*
+     * Action listeners for big buttons
+     */
+    var actions = document.getElementsByClassName("babyAction");
+    for (var i=0;i<actions.length;i++){
+        actions[i].addEventListener("click", function(evt){
+            evt.preventDefault();
+            evt.stopPropagation();
+            
+            for(var k=0;k<actions.length;k++){
+                actions[k].classList.remove("active");
+            }
+            var button = this;
+            button.classList.add("active");
+            
+            ui.action(button.id);
+            
+            return false;
+        });
+    }
+    
+    window.addEventListener("online", function(){
+        ui.goOnline();
+    }, true);
+    
+    window.addEventListener("offline", function(){
+        ui.goOffline();
+    }, true);
+    
+    /*
+     * Action listeners for tabs
+     */
+    var tabs = document.getElementsByClassName("viewTab");
+    for (var i=0;i<tabs.length;i++){
+        tabs[i].addEventListener("click", function(evt){
+            evt.preventDefault();
+            evt.stopPropagation();
+            for (var i=0;i<tabs.length;i++){
+                tabs[i].classList.remove("active");
+            }
+            this.classList.add("active");
+            ui.toggleView(this.id);
+        });
+    }
+    
+    /*
+     * Initialize date-time picker
+     */
+    if (isDatetimeTypeSupported()){
+        var input = document.getElementById("activityTime");
+        input.addEventListener("change", function(evt){
+            try {
+                if (evt.target.valueAsDate)
+                    ui.actionDate = evt.target.valueAsDate;
+            } catch (e){
+                if (window.console)
+                    console.log(e);
+            }
+        });
+        
+    } else {
+        
+        loadjsfile("/static/js/datetimepicker.js", function(){
+            loadcssfile("/static/css/datetimepicker.css", function(){
+                $("#activityTime").attr("readonly", "readonly");
+                $("#activityTime").datetimepicker({
+                    format: "dd MM yyyy - hh:ii",
+                    autoclose: true,
+                    todayBtn: true
+                }).on('changeDate', function(ev){
+                    if (ev.date){
+                        ui.convertAndSetActionDate(ev.date);
+                    }
+                });
+                
+                $("#activityTime").datetimepicker('setDate', new Date());
+            });
+        });
+        
+    }
+    
+    /*
+     * Action listener for "manual add" button
+     */ 
+    document.getElementById("addAction").addEventListener("click", function(evt){
+        ui.addAction();
+    });
+    
+    /*
+     * Get initial data for views
+     */
+    var daysXHR = new XHR('GET', '/babyactions/'+name, function(data) {
+        try{
+            if (this.readyState == 4 && this.status == 200) {
+                var actions = JSON.parse(this.responseText);                    
+                
+                for (var i=0;i<actions.length;i++){
+                    ui.mirror.addAction(actions[i]);
+                }
+                ui.mirror.persist();
+                ui.chartView.drawAllDays(ui.mirror.days);
+            }
+        } catch (err){
+            console.log('Unable to receive data - using local cache ', err);
+        }
+    });
+    daysXHR.send();
+}
+
+function loadjsfile(filename, callback) {
+    var fileref = document.createElement('script');
+    fileref.setAttribute("type", "text/javascript");
+    fileref.setAttribute("src", filename);
+    fileref.onload = function () {
+        callback();
+    };
+
+    if (typeof fileref != "undefined")
+        document.getElementsByTagName("head")[0].appendChild(fileref);
+}
+
+function loadcssfile(filename, callback) {
+    var fileref = document.createElement("link")
+    fileref.setAttribute("rel", "stylesheet")
+    fileref.setAttribute("type", "text/css")
+    fileref.setAttribute("href", filename)
+    fileref.onload = function () {
+        callback();
+    };
+    if (typeof fileref != "undefined")
+        document.getElementsByTagName("head")[0].appendChild(fileref)
+}
+
+
+
+function isDatetimeTypeSupported() {
+    // Create element
+    var input = document.createElement("input");
+    // attempt to set the specified type
+    input.setAttribute("type", "datetime");
+    // If the "type" property equals "text"
+    // then that input type is not supported
+    // by the browser
+    var val = (input.type !== "text");
+    // Delete "input" variable to
+    // clear up its resources
+    delete input;
+    // Return the detected value
+    return val;
+}
+</script>
+</head>
+<body onload="initTest()">
+    <div id="in-nav">
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <ul class="pull-right">
+                        <!--li><a href="#">Link1</a></li>
+              <li><a href="#">Link2</a></li>
+              <li><a href="#">Link3</a></li>
+              <li><a href="#">Login</a></li-->
+                    </ul>
+                    <a id="logo" href="#">
+                        <h4>
+                            Baby<strong>Rythm</strong>
+                        </h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="in-sub-nav">
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <ul>
+                        <li><a href="#" id="eat" class="babyAction"><i class="batch eat"></i><br>Eat</a></li>
+                        <!--<li><span class="label label-important pull-right">08</span><a href="#"><i class="batch sleep"></i><br>Спимо</a></li>-->
+                        <li><a href="#" id="sleep" class="babyAction"><i class="batch sleep"></i><br>Sleep</a></li>
+                        <li><a href="#" id="change" class="babyAction"><i class="batch change"></i><br>Change</a></li>
+                        <li><a href="#" id="fussy" class="babyAction"><i class="batch fussy"></i><br>Fussy</a></li>
+                        <li><a href="#" id="awake" class="babyAction"><i class="batch awake"></i><br>Awake</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page">
+        <div class="page-container">
+            <div class="container">
+                <div class="row">
+                    <div class="span12">
+                        <div style="width: 420px; margin: 0 auto;" id="manualForm">
+                            <select width="100px" style="width: 100px; float: left; margin-right: 20px;"
+                                id="manualAction">
+                                <option value="">Action...</option>
+                                <option value="eat">Eat</option>
+                                <option value="sleep">Sleep</option>
+                                <option value="change">Change</option>
+                                <option value="fussy">Fussy</option>
+                                <option value="awake">Awake</option>
+                            </select> <input size="16" type="datetime" class="form_datetime" id="activityTime" />
+                            <button type="submit" class="btn btn-primary" id="addAction" style="margin-bottom: 10px">Add</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tabbable tabs-below">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="canvasesPane">
+                            <div style="width: 720px; margin: 0 auto;" id="canvases"></div>
+                        </div>
+                        <div class="tab-pane" id="listPane">
+                            <div class="row">
+                                <div class="span12">
+                                    <ul style="width: 720px; margin: 0 auto;" id="lists"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs">
+                        <li class="active viewTab" id="chartView"><a data-toggle="tab">Chart</a></li>
+                        <li class="viewTab" id="listView"><a data-toggle="tab">List</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="span12">BabyRhythm &#169;</div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

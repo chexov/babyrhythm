@@ -1,0 +1,23 @@
+# buiding with Eclipse artefacts:
+/bin
+/target
+
+# Maven/Eclipse artefacts:
+.classpath
+.settings/
+.project
+
+# Mac OS `thumbnails` folder file:
+.DS_Store
+
+# Python:
+*.pyc
+
+# VIM temp files:
+*.swp
+*.swo
+
+localhost-*.conf
+*localhost.conf
+*.conf.local
+/org.eclipse.*.prefs
