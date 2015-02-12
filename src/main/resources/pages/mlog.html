@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="description" content="BabyRythm, simple logging of baby activities">
+    <meta name="author" content="babyrhythm">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>BabyRythm</title>
+    <link href="/static/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+    <link href="/static/bootstrap-3.1.1/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen"/>
+    <link href="/static/css/humanejs-jackedup.css" rel="stylesheet"/>
+    <link
+            href='http://fonts.googleapis.com/css?family=Istok+Web|Comfortaa|Didact+Gothic:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic &subset=latin,cyrillic-ext,cyrillic,latin-ext'
+            rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/static/css/babyrhythm.css"/>
+    <link rel="stylesheet" href="/static/css/toastr.css"/>
+    <title>BabyRythm</title>
+    <script>
+        var name = "Babyname";
+    </script>
+    <script type="text/javascript" src="/static/js/humane.js"></script>
+    <script type="text/javascript" src="/static/js/chartview.js"></script>
+    <script type="text/javascript" src="/static/js/listview.js"></script>
+    <script type="text/javascript" src="/static/js/xhr.js"></script>
+    <script type="text/javascript" src="/static/js/actionStore.js"></script>
+    <script type="text/javascript" src="/static/js/ui.js"></script>
+    <script type="text/javascript" src="/static/js/localActionsMirror.js"></script>
+    <script type="text/javascript" src="/static/js/babyrhythm.js"></script>
+
+    <style>
+        .actionButton {
+            border: solid #ffffff 1px;
+            height: 120px;
+            font-size: 3em;
+        }
+
+    </style>
+</head>
+<body onload="init()">
+<div id="in-nav">
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <ul class="pull-right">
+                    <li><span id="networkstatus">online</span></li>
+                    <li><a id="reset">Reset</a></li>
+                </ul>
+                <a id="logo" href="#">
+                    <h4>
+                        Baby<strong>Rhythm</strong>
+                    </h4>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="background-color: black">
+    <div class="row">
+        <a href="#" id="eat" class="col-xs-6 babyAction actionButton"><i class="batch eat"></i><br>Eat</a>
+        <a href="#" id="sleep" class="col-xs-6 babyAction actionButton"><i class="batch sleep"></i><br>Sleep</a>
+    </div>
+    <div class="row">
+        <a href="#" id="change" class="col-xs-6 babyAction actionButton"><i class="batch change"></i><br>Change</a>
+        <a href="#" id="fussy" class="col-xs-6 babyAction actionButton"><i class="batch fussy"></i><br>Fussy</a>
+    </div>
+    <div class="row">
+        <a href="#" id="awake" class="col-xs-12 babyAction actionButton"><i class="batch awake"></i><br>Awake</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div style="width: 420px; margin: 0 auto;" id="manualForm">
+            <select width="100px" style="width: 100px; float: left; margin-right: 20px;"
+                    id="manualAction">
+                <option value="">Action...</option>
+                <option value="eat">Eat</option>
+                <option value="sleep">Sleep</option>
+                <option value="change">Change</option>
+                <option value="fussy">Fussy</option>
+                <option value="awake">Awake</option>
+            </select> <input size="16" type="datetime" class="form_datetime" id="activityTime"/>
+            <button type="submit" class="btn btn-primary" id="addAction" style="margin-bottom: 10px">Add
+            </button>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row" id="canvasesPane">
+        <div style="width: 720px; margin: 0 auto;" id="canvases"></div>
+    </div>
+</div>
+</div>
+<footer>
+    <div class="row">
+        <div class="col-xs-12">BabyRhythm &#169;</div>
+    </div>
+</footer>
+</body>
+</html>
