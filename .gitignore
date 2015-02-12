@@ -10,6 +10,7 @@
 # Idea artefacts
 babyrhythm.iml
 babyrhythm/.idea*
+.idea*
 
 # Mac OS `thumbnails` folder file:
 .DS_Store
