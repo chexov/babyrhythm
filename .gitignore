@@ -7,6 +7,10 @@
 .settings/
 .project
 
+# Idea artefacts
+babyrhythm.iml
+babyrhythm/.idea*
+
 # Mac OS `thumbnails` folder file:
 .DS_Store
 
@@ -21,3 +25,4 @@ localhost-*.conf
 *localhost.conf
 *.conf.local
 /org.eclipse.*.prefs
+
