@@ -43,7 +43,7 @@ public class Server {
             UserService us = new UserService(new File(conf.fsRoot, "users"));
             server.add("/fb", new FacebookLoginController(us, new AuthService(us), "497207593664605", "64fa9962a12964ca167a44978af636e5", "http://192.168.1.200:2424"));
             server.add("/", new LogController());
-            server.add("/m", new Controller(){
+            server.add("/m/*", new Controller(){
                 @Override
                 public View get(HttpServletRequest request, PathParser pathInfo) throws Exception {
                         return new StaticFilesView("/pages/mlog.html");
